@@ -61,8 +61,10 @@ abstract class LoginStoreBase with Store {
         // return [ AlertType.info, "ATENÇÃO", result];
         alertDialog(context, AlertType.info, "ATENÇÃO", result);
       } else {
+        //TODO: Revisar
+        ///Se os dados são na home, essa função tem que chamar na home
+        // await appController.recoverUserData();
         Modular.to.navigate('/home');
-        await appController.recoverUserData();
       }
     } else {
       alertDialog(context, AlertType.info, "ATENÇÃO",

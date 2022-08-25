@@ -16,7 +16,6 @@ abstract class _AppControllerBase with Store {
   UserModel userModel = UserModel();
 
   @action
-  ///Recuperar dados do usuário:
   recoverUserData() async {
     bool response = _dataBaseGlobal.checkCurrentUser();
     if(response){

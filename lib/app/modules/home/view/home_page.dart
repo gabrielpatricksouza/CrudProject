@@ -8,11 +8,32 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final HomeStore controller = Modular.get();
+
   final appController = Modular.get<AppController>();
+
+  //TODO: Revisar
+  ///Modo Certo de chamar a função
+  /// Melhorias:
+  /// tirar essa requisição da appController e colocar tanto no home_store,
+  /// quanto no repository (O que está em : services/dataBase_global
+  void onInit()async{
+    await appController.recoverUserData();
+  }
+
+  @override
+  void initState() {
+    onInit();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

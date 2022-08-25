@@ -34,11 +34,23 @@ class UserModel {
       name: dados['name'] ?? '',
       email: dados['email'] ?? '',
       cpf: dados['cpf'] ?? '',
-      genre: dados['genre'] ?? '',
-      phone: dados['phone'] ?? '',
-      maritalStatus: dados['maritalStatus'] ?? '',
+      genre: dados['sexo'] ?? '',
+      phone: dados['telefone'] ?? '',
+      maritalStatus: dados['estado_civil'] ?? '',
       password: dados['password'] ?? '',
     );
+
+    //TODO: Revisar
+    ///Como estáva antes {nomes dentro de [] estáva errado}
+    // return UserModel(
+    //   name: dados['name'] ?? '',
+    //   email: dados['email'] ?? '',
+    //   cpf: dados['cpf'] ?? '',
+    //   genre: dados['genre'] ?? '',
+    //   phone: dados['phone'] ?? '',
+    //   maritalStatus: dados['maritalStatus'] ?? '',
+    //   password: dados['password'] ?? '',
+    // );
   }
 
   factory UserModel.clean() {

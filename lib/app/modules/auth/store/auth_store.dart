@@ -9,13 +9,14 @@ class AuthStore = AuthStoreBase with _$AuthStore;
 
 abstract class AuthStoreBase with Store {
   final AuthSevice _authSevice = AuthSevice();
-  final AppController _appController = Modular.get();
 
   ///Verificar usuário logado:
   verifyLoggedUser() {
     final loggedUser = _authSevice.checkCurrentUser();
     if (loggedUser) {
-      _appController.recoverUserData();
+      //TODO: Revisar
+      ///Se os dados são na home, essa função tem que chamar na home
+      // _appController.recoverUserData();
       Modular.to.navigate('/home');
     } else {
       Modular.to.navigate('/login');
