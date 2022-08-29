@@ -22,12 +22,11 @@ class InputCustomized extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final Function(String)? onChanged;
 
-  const InputCustomized({
-    Key? key,
+  const InputCustomized({Key? key,
     this.controller,
     this.fillColor = Colors.transparent,
-    this.shadowColor = const Color(0xFF6F35A5),
-    this.enableColor = const Color(0xFF6F35A5),
+    this.shadowColor = const Color(0x00ffffff),
+    this.enableColor = const Color(0xff1a1919),
     this.hintText = "",
     this.obscure = false,
     this.autofocus = false,
@@ -87,9 +86,11 @@ class InputCustomized extends StatelessWidget {
             color: Color(0xFF6F35A5),
           ),
         ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: const BorderRadius.all(Radius.circular(25)),
-          borderSide: BorderSide(width: 1.2, color: enableColor),
+
+        enabledBorder: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(25)),
+          borderSide:
+          BorderSide(width: 1.2, color: Color(0xFF6F35A5)), //Color(0xff1a1919)
         ),
       ),
       cursorColor: Theme.of(context).primaryColor,

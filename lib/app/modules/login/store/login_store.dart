@@ -1,4 +1,3 @@
-import 'package:crud_project/app/app_controller.dart';
 import 'package:crud_project/app/model/user.dart';
 import 'package:crud_project/app/modules/login/repository/login_repository.dart';
 import 'package:crud_project/app/widgets/alert.dart';
@@ -12,7 +11,7 @@ part 'login_store.g.dart';
 class LoginStore = LoginStoreBase with _$LoginStore;
 
 abstract class LoginStoreBase with Store {
-  AppController appController = Modular.get();
+  // HomeRepository homeRepository = Modular.get();
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();

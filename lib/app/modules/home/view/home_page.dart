@@ -3,29 +3,33 @@ import 'package:crud_project/app/app_controller.dart';
 import 'package:crud_project/app/modules/home/store/home_store.dart';
 import 'package:crud_project/app/widgets/input_customized.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key? key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  final HomeStore controller = Modular.get();
 
+  final HomeStore controller = Modular.get();
   final appController = Modular.get<AppController>();
+  bool readOnly = true;
 
   //TODO: Revisar
   ///Modo Certo de chamar a função
   /// Melhorias:
   /// tirar essa requisição da appController e colocar tanto no home_store,
   /// quanto no repository (O que está em : services/dataBase_global
-  void onInit()async{
+
+
+  void onInit() async {
     await appController.recoverUserData();
   }
 
@@ -40,58 +44,20 @@ class _HomePageState extends State<HomePage> {
     return Observer(
       builder: (_) => Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color(0xFF6F35A5),
+          backgroundColor: Colors.white,
           elevation: 0,
-        ),
-        drawer: Drawer(
-          child: ListView(
-            children: [
-              DrawerHeader(
-                decoration: const BoxDecoration(
-                  color: Color(0xFF6F35A5),
-                ),
-                child: Container(
-                  alignment: Alignment.bottomLeft,
-                  child: const Text(
-                    "Menu",
-                    style: TextStyle(
-                        fontSize: 25,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
+          actions: [
+            IconButton(
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+                Modular.to.navigate('/login');
+              },
+              icon: const Icon(
+                Icons.logout,
+                color: Color(0xFF6F35A5),
               ),
-              ListTile(
-                leading: const Icon(
-                  Icons.person_outline,
-                  color: Color(0xFF6F35A5),
-                ),
-                title: const Text(
-                  'Editar perfil',
-                  style: TextStyle(
-                    fontSize: 17,
-                    color: Color(0xFF6F35A5),
-                  ),
-                ),
-                onTap: () {},
-              ),
-              const Divider(),
-              ListTile(
-                leading: const Icon(
-                  Icons.logout,
-                  color: Color(0xFF6F35A5),
-                ),
-                title: const Text(
-                  'Sair',
-                  style: TextStyle(fontSize: 17, color: Color(0xFF6F35A5)),
-                ),
-                onTap: () {
-                  FirebaseAuth.instance.signOut();
-                  Modular.to.navigate('/login');
-                },
-              ),
-            ],
-          ),
+            )
+          ],
         ),
         body: SafeArea(
           child: Observer(
@@ -114,12 +80,29 @@ class _HomePageState extends State<HomePage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          const SizedBox(
-                            height: 10,
+                          GestureDetector(
+                            onTap: () {
+                              print('pressionado');
+                            },
+                            child: const Center(
+                              child: CircleAvatar(
+                                radius: 60,
+                                backgroundColor: Color(0xFFF1E6FF),
+                                child: Image(
+                                    image: NetworkImage(
+                                        'https://www.otaviomiranda.com.br/wp-content/uploads/2018/07/foto-perfil-2.png')),
+                                // child: Icon(
+                                //   Icons.person,
+                                //   size: 60,
+                                //   color: Color(0xFF6F35A5),
+                                // ),
+                              ),
+                            ),
                           ),
+                          const SizedBox(height: 15),
                           InputCustomized(
                             icon: Icons.person,
-                            readOnly: controller.readOnly,
+                            readOnly: readOnly,
                             hintText: controller.readOnly
                                 ? controller.appController.userModel.name
                                 : "Nome",
@@ -127,10 +110,10 @@ class _HomePageState extends State<HomePage> {
                             keyboardType: TextInputType.text,
                             controller: controller.nameController,
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 15),
                           InputCustomized(
                             icon: Icons.email_outlined,
-                            readOnly: controller.readOnly,
+                            readOnly: readOnly,
                             hintText: controller.readOnly
                                 ? controller.appController.userModel.email
                                 : "E-mail",
@@ -138,18 +121,18 @@ class _HomePageState extends State<HomePage> {
                             keyboardType: TextInputType.emailAddress,
                             controller: controller.emailController,
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 15),
                           InputCustomized(
                             icon: Icons.credit_card_rounded,
-                            readOnly: true,
+                            readOnly: readOnly,
                             hintText: controller.appController.userModel.cpf,
                             hintStyle: const TextStyle(color: Colors.black),
                             keyboardType: TextInputType.emailAddress,
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 15),
                           InputCustomized(
                             icon: Icons.phone,
-                            readOnly: controller.readOnly,
+                            readOnly: readOnly,
                             hintText: controller.readOnly
                                 ? controller.appController.userModel.phone
                                 : "Telefone",
@@ -161,19 +144,19 @@ class _HomePageState extends State<HomePage> {
                             ],
                             controller: controller.telController,
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 15),
                           InputCustomized(
                             icon: Icons.people,
-                            readOnly: true,
+                            readOnly: readOnly,
                             hintText: controller
                                 .appController.userModel.maritalStatus,
                             hintStyle: const TextStyle(color: Colors.black),
                             keyboardType: TextInputType.emailAddress,
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 15),
                           InputCustomized(
                             icon: Icons.person_outline_outlined,
-                            readOnly: true,
+                            readOnly: readOnly,
                             hintText: controller.appController.userModel.genre,
                             hintStyle: const TextStyle(color: Colors.black),
                             keyboardType: TextInputType.emailAddress,
@@ -185,10 +168,19 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
+          backgroundColor: const Color(0xFFF1E6FF),
           onPressed: () {
-            controller.increment();
+            if (kDebugMode) {
+              print('resreser');
+            }
+            setState(() {
+              readOnly = false;
+            });
+            if (kDebugMode) {
+              print(readOnly);
+            }
           },
-          child: const Icon(Icons.add),
+          child: const Icon(Icons.edit_outlined, color: Color(0xFF6F35A5)),
         ),
       ),
     );

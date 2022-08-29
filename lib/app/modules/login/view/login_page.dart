@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
                   'assets/images/chat.svg',
                   height: size.height * 0.50,
                 ),
-                SizedBox(height: size.height * 0.07),
+                SizedBox(height: size.height * 0.12),
                 Container(
                   margin: const EdgeInsets.symmetric(
                     vertical: 10,
@@ -59,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
                         padding: const EdgeInsets.symmetric(
                             vertical: 20, horizontal: 40),
                         primary: Colors.white,
-                        backgroundColor: const Color(0xFF6F35A5),
+                        backgroundColor: const Color(0xFFFFD180),
                       ),
                       child: const Text('LOGIN'),
                     ),

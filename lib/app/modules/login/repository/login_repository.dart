@@ -19,13 +19,14 @@ class LoginRepository {
     }
   }
 
-  Future<bool> registerUser(UserModel model, User user) async {
+  Future registerUser(UserModel model, User user) async {
     try {
       FirebaseFirestore.instance
           .collection(FirebaseConst.usuarios)
           .doc(user.uid)
           .set({
         "id": user.uid,
+        "imagem_usuario": model.userImage,
         "name": model.name,
         "email": model.email,
         "cpf": model.cpf,
@@ -34,10 +35,38 @@ class LoginRepository {
         "sexo": model.genre,
       });
       return true;
-    } catch (e) {
-      debugPrint('Error [login_repository/registerUser]: $e');
-      return false;
+    } on fireAuth.FirebaseAuthException catch (error) {
+      String errorMessage;
+
+      switch (error.code) {
+        case "weak-password":
+          errorMessage = "Senha fraca!";
+          return errorMessage;
+
+        case "invalid-email":
+          errorMessage =
+              "O valor fornecido para a propriedade do usuário email é inválido!";
+          return errorMessage;
+
+        case "email-already-exists":
+          errorMessage =
+              "O e-mail fornecido já está em uso por outro usuário. ";
+          return errorMessage;
+
+        case "email-already-in-use":
+          errorMessage =
+              "O e-mail fornecido já está em uso por outro usuário. ";
+          return errorMessage;
+
+        default:
+          errorMessage = "Um erro desconhecido ocorreu.";
+          return errorMessage;
+      }
     }
+    // catch (e) {
+    //   debugPrint('Error [login_repository/registerUser]: $e');
+    //   return false;
+    // }
   }
 
   Future loginUser(UserModel model) async {
@@ -50,8 +79,7 @@ class LoginRepository {
 
       switch (error.code) {
         case "invalid-email":
-          errorMessage =
-              "Email é inválido!";
+          errorMessage = "Email é inválido!";
           return errorMessage;
 
         case "wrong-password":

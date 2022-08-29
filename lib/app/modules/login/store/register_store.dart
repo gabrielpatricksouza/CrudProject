@@ -16,6 +16,12 @@ final cpfController = TextEditingController();
 final passwordController = TextEditingController();
 final telController = TextEditingController();
 
+@observable
+bool viewPassword = true;
+
+@action
+void boolViewPassword() => viewPassword = !viewPassword;
+
 ///Validar campos:
 abstract class _RegisterStore with Store {
   List validateFields(UserModel model) {

@@ -1,8 +1,6 @@
 import 'dart:io';
 import 'package:crud_project/app/modules/login/store/register_store.dart';
-import 'package:crud_project/app/widgets/select_photo_options.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:crud_project/app/model/user.dart';
 import 'package:crud_project/app/widgets/alert.dart';
@@ -10,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
@@ -29,8 +26,39 @@ class _RegisterPageState extends State<RegisterPage> {
 
   String groupValueSexo = "";
   String groupValue = "";
+  String url = "";
   bool loading = false;
   bool hidepassword = true;
+
+  Future<XFile?> getImage() async {
+    //instância
+    final ImagePicker picker = ImagePicker();
+    XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    return image;
+  }
+
+
+  Future<void> upload(String path) async {
+    // recuperar um arquivo:
+    File file = File(path);
+    try {
+      String ref = 'images/img-{email da pessoa}.jpg';
+      final img = storage.ref(ref);
+      await img.putFile(file);
+      url = await img.getDownloadURL();
+
+    } on FirebaseException catch (e) {
+      throw Exception('Erro no upload: ${e.code}');
+    }
+  }
+
+  pickAndUploadImage() async {
+    XFile? file = await getImage();
+    if (file != null) {
+      await upload(file.path);
+    }
+  }
+
 
   // Future _pickImage(ImageSource source) async {
   //   try {
@@ -143,6 +171,27 @@ class _RegisterPageState extends State<RegisterPage> {
                     //     ),
                     //   ),
                     // ),
+                    GestureDetector(
+                      onTap: (){ print('pressionado');},
+                      child: const Center(
+                        child: CircleAvatar(
+                          radius: 60,
+                          backgroundColor: Color(0xFFF1E6FF),
+                          child: Icon(
+                            Icons.person,
+                            size: 60,
+                            color: Color(0xFF6F35A5),
+                          ),
+                        ),
+                      ),
+                    ),
+
+
+                    // IconButton(
+                    //     onPressed: pickAndUploadImage,
+                    //     icon: const Icon(Icons.camera_rounded)),
+                    const SizedBox(height: 10,),
+
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -157,6 +206,8 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ],
                     ),
+
+
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 25.0, vertical: 12.0),
@@ -174,6 +225,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                           hintText: "Nome",
                         ),
+                        cursorColor: Colors.deepPurple,
                         controller: nameController,
                       ),
                     ),
@@ -194,6 +246,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                           hintText: "E-mail",
                         ),
+                        cursorColor: Colors.deepPurple,
                         controller: emailController,
                       ),
                     ),
@@ -205,7 +258,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           filled: true,
                           fillColor: const Color(0xFFF1E6FF),
                           prefixIcon: const Icon(
-                            Icons.person_pin_circle_outlined,
+                            Icons.credit_card_rounded,
                             color: Color(0xFF6F35A5),
                           ),
                           border: OutlineInputBorder(
@@ -214,6 +267,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                           hintText: "CPF",
                         ),
+                        cursorColor: Colors.deepPurple,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
                           CpfInputFormatter(),
@@ -238,6 +292,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                           hintText: "Telefone",
                         ),
+                        cursorColor: Colors.deepPurple,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
                           TelefoneInputFormatter(),
@@ -381,9 +436,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                 }
                               },
                               icon: Icon(
-                                hidepassword == true
+                                viewPassword
                                     ? Icons.remove_red_eye
-                                    : Icons.close,
+                                    : Icons.visibility_off,
                                 color: const Color(0xFF6F35A5),
                               )),
                           border: OutlineInputBorder(
@@ -392,9 +447,11 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                           hintText: "Senha",
                         ),
+                        cursorColor: Colors.deepPurple,
                         controller: passwordController,
                       ),
                     ),
+
                     Container(
                       margin: const EdgeInsets.symmetric(
                         vertical: 10,

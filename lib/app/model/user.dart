@@ -1,4 +1,5 @@
 class UserModel {
+  String userImage;
   String name;
   String email;
   String cpf;
@@ -8,6 +9,7 @@ class UserModel {
   String genre;
 
   UserModel({
+    this.userImage = '',
     this.name = '',
     this.email = '',
     this.cpf = '',
@@ -19,6 +21,7 @@ class UserModel {
 
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = {
+      "userImage": userImage,
       "name": name,
       "email": email,
       "cpf": cpf,
@@ -29,15 +32,16 @@ class UserModel {
     return map;
   }
 
-  factory UserModel.fromMap(Map<dynamic, dynamic> dados) {
+  factory UserModel.fromMap(Map<dynamic, dynamic>? dados) {
     return UserModel(
-      name: dados['name'] ?? '',
-      email: dados['email'] ?? '',
-      cpf: dados['cpf'] ?? '',
-      genre: dados['sexo'] ?? '',
-      phone: dados['telefone'] ?? '',
-      maritalStatus: dados['estado_civil'] ?? '',
-      password: dados['password'] ?? '',
+      userImage: dados?['imagem_usuario'] ?? '',
+      name: dados?['name'] ?? '',
+      email: dados?['email'] ?? '',
+      cpf: dados?['cpf'] ?? '',
+      genre: dados?['sexo'] ?? '',
+      phone: dados?['telefone'] ?? '',
+      maritalStatus: dados?['estado_civil'] ?? '',
+      password: dados?['password'] ?? '',
     );
 
     //TODO: Revisar

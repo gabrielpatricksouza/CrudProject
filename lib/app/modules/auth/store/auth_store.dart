@@ -1,4 +1,3 @@
-import 'package:crud_project/app/app_controller.dart';
 import 'package:crud_project/app/modules/auth/service/auth_service.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
