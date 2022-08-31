@@ -1,5 +1,4 @@
 import 'package:brasil_fields/brasil_fields.dart';
-import 'package:crud_project/app/app_controller.dart';
 import 'package:crud_project/app/modules/home/store/home_store.dart';
 import 'package:crud_project/app/widgets/input_customized.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,18 +18,10 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   final HomeStore controller = Modular.get();
-  final appController = Modular.get<AppController>();
   bool readOnly = true;
 
-  //TODO: Revisar
-  ///Modo Certo de chamar a função
-  /// Melhorias:
-  /// tirar essa requisição da appController e colocar tanto no home_store,
-  /// quanto no repository (O que está em : services/dataBase_global
-
-
   void onInit() async {
-    await appController.recoverUserData();
+    await controller.recoverUserData();
   }
 
   @override
@@ -104,7 +95,7 @@ class _HomePageState extends State<HomePage> {
                             icon: Icons.person,
                             readOnly: readOnly,
                             hintText: controller.readOnly
-                                ? controller.appController.userModel.name
+                                ? controller.userModel.name
                                 : "Nome",
                             hintStyle: const TextStyle(color: Colors.black),
                             keyboardType: TextInputType.text,
@@ -115,7 +106,7 @@ class _HomePageState extends State<HomePage> {
                             icon: Icons.email_outlined,
                             readOnly: readOnly,
                             hintText: controller.readOnly
-                                ? controller.appController.userModel.email
+                                ? controller.userModel.email
                                 : "E-mail",
                             hintStyle: const TextStyle(color: Colors.black),
                             keyboardType: TextInputType.emailAddress,
@@ -125,7 +116,7 @@ class _HomePageState extends State<HomePage> {
                           InputCustomized(
                             icon: Icons.credit_card_rounded,
                             readOnly: readOnly,
-                            hintText: controller.appController.userModel.cpf,
+                            hintText: controller.userModel.cpf,
                             hintStyle: const TextStyle(color: Colors.black),
                             keyboardType: TextInputType.emailAddress,
                           ),
@@ -134,7 +125,7 @@ class _HomePageState extends State<HomePage> {
                             icon: Icons.phone,
                             readOnly: readOnly,
                             hintText: controller.readOnly
-                                ? controller.appController.userModel.phone
+                                ? controller.userModel.phone
                                 : "Telefone",
                             hintStyle: const TextStyle(color: Colors.black),
                             keyboardType: TextInputType.phone,
@@ -148,8 +139,7 @@ class _HomePageState extends State<HomePage> {
                           InputCustomized(
                             icon: Icons.people,
                             readOnly: readOnly,
-                            hintText: controller
-                                .appController.userModel.maritalStatus,
+                            hintText: controller.userModel.maritalStatus,
                             hintStyle: const TextStyle(color: Colors.black),
                             keyboardType: TextInputType.emailAddress,
                           ),
@@ -157,7 +147,7 @@ class _HomePageState extends State<HomePage> {
                           InputCustomized(
                             icon: Icons.person_outline_outlined,
                             readOnly: readOnly,
-                            hintText: controller.appController.userModel.genre,
+                            hintText: controller.userModel.genre,
                             hintStyle: const TextStyle(color: Colors.black),
                             keyboardType: TextInputType.emailAddress,
                           ),

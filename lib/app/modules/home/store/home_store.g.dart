@@ -41,6 +41,30 @@ mixin _$HomeStore on HomeStoreBase, Store {
     });
   }
 
+  late final _$userModelAtom =
+      Atom(name: 'HomeStoreBase.userModel', context: context);
+
+  @override
+  UserModel get userModel {
+    _$userModelAtom.reportRead();
+    return super.userModel;
+  }
+
+  @override
+  set userModel(UserModel value) {
+    _$userModelAtom.reportWrite(value, super.userModel, () {
+      super.userModel = value;
+    });
+  }
+
+  late final _$recoverUserDataAsyncAction =
+      AsyncAction('HomeStoreBase.recoverUserData', context: context);
+
+  @override
+  Future recoverUserData() {
+    return _$recoverUserDataAsyncAction.run(() => super.recoverUserData());
+  }
+
   late final _$HomeStoreBaseActionController =
       ActionController(name: 'HomeStoreBase', context: context);
 
@@ -67,10 +91,22 @@ mixin _$HomeStore on HomeStoreBase, Store {
   }
 
   @override
+  dynamic clearVariables() {
+    final _$actionInfo = _$HomeStoreBaseActionController.startAction(
+        name: 'HomeStoreBase.clearVariables');
+    try {
+      return super.clearVariables();
+    } finally {
+      _$HomeStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 readOnly: ${readOnly},
-loading: ${loading}
+loading: ${loading},
+userModel: ${userModel}
     ''';
   }
 }

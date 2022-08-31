@@ -1,14 +1,16 @@
-import 'package:crud_project/app/app_controller.dart';
+
+import 'package:crud_project/app/model/user.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
+
+import '../repository/home_repository.dart';
 
 part 'home_store.g.dart';
 
 class HomeStore = HomeStoreBase with _$HomeStore;
 
 abstract class HomeStoreBase with Store {
-  final AppController appController = Modular.get();
+  final _repository = HomeRepository();
 
   final nameController = TextEditingController();
   final emailController = TextEditingController();
@@ -24,8 +26,18 @@ abstract class HomeStoreBase with Store {
   changeReadOnly(bool value) => readOnly = value;
 
   @action
-  ///Buscar dados do usuário:
   fetchUserData() {
+    nameController.text = userModel.name;
+    emailController.text = userModel.email;
+    cpfController.text = userModel.cpf;
+    telController.text = userModel.phone;
+    maritalStsController.text = userModel.maritalStatus;
+    genreController.text = userModel.genre;
+  }
+
+  //TODO: Como estava antes
+  /*
+  * fetchUserData() {
     nameController.text = appController.userModel.name;
     emailController.text = appController.userModel.email;
     cpfController.text = appController.userModel.cpf;
@@ -33,9 +45,28 @@ abstract class HomeStoreBase with Store {
     maritalStsController.text = appController.userModel.maritalStatus;
     genreController.text = appController.userModel.genre;
   }
+  * */
+
 
   @observable
   bool loading = false;
+
+
+  @observable
+  UserModel userModel = UserModel();
+
+  @action
+  recoverUserData() async {
+    bool response = _repository.checkCurrentUser();
+    if(response){
+      userModel = await _repository.recoverUserData();
+    }
+  }
+
+  @action
+  clearVariables(){
+    userModel = UserModel.clean();
+  }
 
   // ///Salvar as alterações:
   // @action
